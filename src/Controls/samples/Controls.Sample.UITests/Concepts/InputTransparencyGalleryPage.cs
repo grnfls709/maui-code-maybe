@@ -33,6 +33,106 @@ namespace Maui.Controls.Sample
 				top.Clicked += (s, e) => t.ViewContainer.ReportFailEvent();
 			});
 
+			// Test when there is an image over the button, should NOT be clickable
+			Add(Test.InputTransparency.ImageOverlay, () =>
+			{
+				var button = new Button { Text = "Click Me!" };
+				var grid = new Grid
+				{
+					new Grid { button },
+					new Image { InputTransparent = false, Source = ImageSource.FromFile("small_dotnet_bot.png") }
+				};
+				return (grid, new { Button = button });
+			})
+			.With(t =>
+			{
+				var v = t.ViewContainer.View;
+				var button = Annotate(t.Additional.Button, v);
+				button.Clicked += (s, e) => t.ViewContainer.ReportFailEvent();
+			});
+
+			// Test when there is a transparent image over the button, should be clickable
+			Add(Test.InputTransparency.TransImageOverlay, () =>
+			{
+				var button = new Button { Text = "Click Me!" };
+				var grid = new Grid
+				{
+					new Grid { button },
+					new Image { InputTransparent = true, Source = ImageSource.FromFile("small_dotnet_bot.png") }
+				};
+				return (grid, new { Button = button });
+			})
+			.With(t =>
+			{
+				var v = t.ViewContainer.View;
+				var button = Annotate(t.Additional.Button, v);
+				button.Clicked += (s, e) => t.ViewContainer.ReportSuccessEvent();
+			});
+
+			// Test when there is an image (with a background) over the button, should NOT be clickable
+			Add(Test.InputTransparency.ImageBackOverlay, () =>
+			{
+				var button = new Button { Text = "Click Me!" };
+				var grid = new Grid
+				{
+					new Grid { button },
+					new Image
+					{
+						InputTransparent = false,
+						Source = ImageSource.FromFile("small_dotnet_bot.png"),
+						Background = Brush.Red
+					}
+				};
+				return (grid, new { Button = button });
+			})
+			.With(t =>
+			{
+				var v = t.ViewContainer.View;
+				var button = Annotate(t.Additional.Button, v);
+				button.Clicked += (s, e) => t.ViewContainer.ReportFailEvent();
+			});
+
+			// Test when there is a transparent image (with a background) over the button, should be clickable
+			Add(Test.InputTransparency.TransImageBackOverlay, () =>
+			{
+				var button = new Button { Text = "Click Me!" };
+				var grid = new Grid
+				{
+					new Grid { button },
+					new Image
+					{
+						InputTransparent = true,
+						Source = ImageSource.FromFile("small_dotnet_bot.png"),
+						Background = Brush.Red
+					}
+				};
+				return (grid, new { Button = button });
+			})
+			.With(t =>
+			{
+				var v = t.ViewContainer.View;
+				var button = Annotate(t.Additional.Button, v);
+				button.Clicked += (s, e) => t.ViewContainer.ReportSuccessEvent();
+			});
+
+			// Test when there is an layout over the button, should NOT be clickable
+			Add(Test.InputTransparency.LayoutOverlay, () =>
+			{
+				var button = new Button { Text = "Click Me!" };
+				var grid = new Grid
+				{
+					new Grid { button },
+					new Grid { InputTransparent = false }
+				};
+				return (grid, new { Button = button });
+			})
+			.With(t =>
+			{
+				var v = t.ViewContainer.View;
+				var button = Annotate(t.Additional.Button, v);
+				button.Clicked += (s, e) => t.ViewContainer.ReportFailEvent();
+			});
+
 			// Test when there is an InputTransparent layout over the button, should be clickable
 			Add(Test.InputTransparency.TransLayoutOverlay, () =>
 			{
@@ -193,15 +293,8 @@ namespace Maui.Controls.Sample
 				{
 					// if one of the parent layouts are NOT transparent, then
 					// the tap should NOT go through to the bottom button
-#if ANDROID
-					// TODO: Android is broken with everything passing through
-					// https://github.com/dotnet/maui/issues/10252
-					bottom.Clicked += (s, e) => t.ViewContainer.ReportSuccessEvent();
-					top.Clicked += (s, e) => t.ViewContainer.ReportFailEvent();
-#else
 					bottom.Clicked += (s, e) => t.ViewContainer.ReportFailEvent();
 					top.Clicked += (s, e) => t.ViewContainer.ReportFailEvent();
-#endif
 				}
 				else
 				{

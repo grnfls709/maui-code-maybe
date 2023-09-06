@@ -53,13 +53,6 @@ namespace Microsoft.Maui.AppiumTests
 				// if the button is clickable or taps pass through to the base button
 				Assert.AreEqual($"Event: {test} (SUCCESS 1)", textAfterClick);
 			}
-			else if (Device == TestDevice.Android)
-			{
-				// TODO: Android is broken with everything passing through so we just use that
-				// to test the bottom button was clickable
-				// https://github.com/dotnet/maui/issues/10252
-				Assert.AreEqual($"Event: {test} (SUCCESS 1)", textAfterClick);
-			}
 			else
 			{
 				// sometimes nothing can happen, so try test that
