@@ -6,6 +6,9 @@ namespace Microsoft.Maui.IntegrationTests
 		public const string DotNetCurrent = "net7.0";
 		public const string DotNetPrevious = "net6.0";
 
+		public const string MauiVersionCurrent = "7.0.86"; // this should not be the same as the last release
+		public const string MauiVersionPrevious = "6.0.550"; // this should not be the same version as the default. aka: MicrosoftMauiPreviousDotNetReleasedVersion in eng/Versions.props
+
 		char[] invalidChars = { '{', '}', '(', ')', '$', ':', ';', '\"', '\'', ',', '=', '.', '-', };
 
 		public string TestName
