@@ -45,6 +45,7 @@ Microsoft.Maui.SizeRequest.Equals(Microsoft.Maui.SizeRequest other) -> bool
 Microsoft.Maui.SoftInputExtensions
 override Microsoft.Maui.Handlers.ContentViewHandler.DisconnectHandler(Microsoft.Maui.Platform.ContentPanel! platformView) -> void
 override Microsoft.Maui.Handlers.MenuFlyoutHandler.DisconnectHandler(Microsoft.UI.Xaml.Controls.MenuFlyout! platformView) -> void
+override Microsoft.Maui.Handlers.ScrollViewHandler.GetDesiredSize(double widthConstraint, double heightConstraint) -> Microsoft.Maui.Graphics.Size
 override Microsoft.Maui.Layouts.FlexBasis.Equals(object? obj) -> bool
 override Microsoft.Maui.Layouts.FlexBasis.GetHashCode() -> int
 override Microsoft.Maui.Platform.MauiPanel.ArrangeOverride(Windows.Foundation.Size finalSize) -> Windows.Foundation.Size

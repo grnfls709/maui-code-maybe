@@ -504,6 +504,8 @@ namespace Microsoft.Maui.Controls.Compatibility
 					fe.InvalidateMeasure();
 				}
 			}
+
+			this.UpdateChildrenLayout();
 		}
 
 		protected override Size ArrangeOverride(Rect bounds)

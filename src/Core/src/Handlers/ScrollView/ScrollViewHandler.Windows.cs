@@ -32,6 +32,18 @@ namespace Microsoft.Maui.Handlers
 			platformView.ViewChanged -= ViewChanged;
 		}
 
+		public override Size GetDesiredSize(double widthConstraint, double heightConstraint)
+		{
+			if (VirtualView != null && VirtualView.PresentedContent != null)
+			{
+				// We need to make sure a call to Measure is invoked on our PresentedContent
+				// when we re-measure ourself
+				VirtualView.PresentedContent.Measure(widthConstraint, heightConstraint);
+			}
+
+			return base.GetDesiredSize(widthConstraint, heightConstraint);
+		}
+
 		public static void MapContent(IScrollViewHandler handler, IScrollView scrollView)
 		{
 			if (handler.PlatformView == null || handler.MauiContext == null)
