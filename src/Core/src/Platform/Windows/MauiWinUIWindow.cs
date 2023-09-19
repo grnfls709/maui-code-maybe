@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using Microsoft.Maui.ApplicationModel;
-using Microsoft.Maui.Devices;
 using Microsoft.Maui.LifecycleEvents;
 using Microsoft.UI;
+using Microsoft.UI.Composition.SystemBackdrops;
 using Microsoft.UI.Windowing;
-using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Media;
 using Windows.Graphics;
+using ViewManagement = Windows.UI.ViewManagement;
 
 namespace Microsoft.Maui
 {
@@ -20,10 +21,12 @@ namespace Microsoft.Maui
 		IntPtr _windowIcon;
 		bool _enableResumeEvent;
 		bool _isActivated;
+		ViewManagement.UISettings _viewSettings;
 
 		public MauiWinUIWindow()
 		{
 			_windowManager = WindowMessageManager.Get(this);
+			_viewSettings = new ViewManagement.UISettings();
 
 			Activated += OnActivated;
 			Closed += OnClosedPrivate;
@@ -33,7 +36,16 @@ namespace Microsoft.Maui
 			// set to false we know the user toggled this to false 
 			// and then we can react accordingly
 			if (AppWindowTitleBar.IsCustomizationSupported())
+			{
 				base.AppWindow.TitleBar.ExtendsContentIntoTitleBar = true;
+				_viewSettings.ColorValuesChanged += _viewSettings_ColorValuesChanged;
+				SetTileBarButtonColors();
+			}
+
+			if (MicaController.IsSupported())
+			{
+				base.SystemBackdrop = new MicaBackdrop() { Kind = MicaKind.Base };
+			}
 
 			SubClassingWin32();
 			SetIcon();
@@ -67,6 +79,8 @@ namespace Microsoft.Maui
 		private void OnClosedPrivate(object sender, UI.Xaml.WindowEventArgs args)
 		{
 			OnClosed(sender, args);
+
+			_viewSettings.ColorValuesChanged -= _viewSettings_ColorValuesChanged;
 
 			if (_windowIcon != IntPtr.Zero)
 			{
@@ -161,6 +175,21 @@ namespace Microsoft.Maui
 						appWindow.SetIcon(iconId);
 					}
 				}
+			}
+		}
+
+		private void _viewSettings_ColorValuesChanged(ViewManagement.UISettings sender, object args)
+		{
+			DispatcherQueue.TryEnqueue(SetTileBarButtonColors);
+		}
+
+		private void SetTileBarButtonColors()
+		{
+			if (AppWindowTitleBar.IsCustomizationSupported())
+			{
+				base.AppWindow.TitleBar.ButtonBackgroundColor = Colors.Transparent;
+				base.AppWindow.TitleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
+				base.AppWindow.TitleBar.ButtonForegroundColor = _viewSettings.GetColorValue(ViewManagement.UIColorType.Foreground);
 			}
 		}
 
