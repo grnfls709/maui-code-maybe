@@ -1146,6 +1146,7 @@ namespace Microsoft.Maui.Controls.Handlers.Compatibility
 				// the animation changing the frame during navigation
 				if (_navigation.TryGetTarget(out n) &&
 					ChildViewControllers.Length > 0 &&
+					!n._disposed &&
 					!n._navigating)
 				{
 					nfloat offset = 0;
